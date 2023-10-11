@@ -11,4 +11,6 @@ router.get("/:id", userController.getUserbyId);
 
 router.put("/update", userController.updateUserData);
 
+router.put("/addNotificationToken", userController.addNotificationToken);
+
 module.exports = router;

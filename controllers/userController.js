@@ -17,7 +17,6 @@ async function login(req, res) {
       .status(200)
       .send({ success: false, data: "Invalid Email or Password" });
   const token = jwt.sign({ _id: user._id }, process.env.JWTKEY);
-
   return res.status(200).send({ success: true, data: user._id, token });
 }
 
@@ -36,6 +35,7 @@ async function signup(req, res) {
     password: hashedPassword,
     phone: req.body.phone,
     userProfileUrl: req.body.userProfileUrl,
+    notificationToken: req.body.token,
   });
 
   await newUser.save();
@@ -61,6 +61,7 @@ async function updateUserData(req, res) {
       username: req.body.username,
       phone: req.body.phone,
       userProfileUrl: req.body.userProfileUrl,
+      status: req.body.status,
     };
 
     if (req.body.change_password) {
@@ -75,7 +76,22 @@ async function updateUserData(req, res) {
     );
     return res.status(200).send({ success: true, data: result });
   } catch (err) {
-    return res.status(500).send({ success: false, data: err.message });
+    return res.status(200).send({ success: false, data: err.message });
+  }
+}
+
+async function addNotificationToken(req, res) {
+  try {
+    const result = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: { notificationToken: req.body.notificationToken } },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .send({ success: true, data: "Notification Added Successfully" });
+  } catch (err) {
+    return res.status(200).send({ success: false, data: err.message });
   }
 }
 
@@ -90,4 +106,5 @@ module.exports = {
   getAllUsers: getAllUsers,
   updateUserData: updateUserData,
   getUserbyId: getUserbyId,
+  addNotificationToken: addNotificationToken,
 };

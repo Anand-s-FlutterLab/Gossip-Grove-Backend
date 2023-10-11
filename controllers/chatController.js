@@ -1,6 +1,6 @@
 const Chat = require("../models/chatModels");
 
-async function startIndividualMessage(req, res) {
+async function sendIndividualMessage(req, res) {
   try {
     const conversation = await Chat.findOne({ chatId: req.body.chatId });
 
@@ -76,7 +76,7 @@ async function getChatList(req, res) {
 }
 
 module.exports = {
-  startIndividualMessage: startIndividualMessage,
+  startIndividualMessage: sendIndividualMessage,
   getChats: getChats,
   getChatList: getChatList,
 };
