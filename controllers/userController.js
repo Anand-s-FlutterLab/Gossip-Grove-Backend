@@ -35,7 +35,7 @@ async function signup(req, res) {
     password: hashedPassword,
     phone: req.body.phone,
     userProfileUrl: req.body.userProfileUrl,
-    notificationToken: req.body.token,
+    notificationToken: req.body.notificationToken,
   });
 
   await newUser.save();
