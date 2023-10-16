@@ -20,7 +20,6 @@ async function sendIndividualMessage(req, res) {
         },
       });
       await newMessage.save();
-      console.log(1);
       return res.status(200).send({ success: true, data: newMessage });
     }
 
@@ -36,7 +35,7 @@ async function sendIndividualMessage(req, res) {
     conversation.markModified("chats");
 
     await conversation.save().then(() => {
-      res.send({ success: true, data: conversation});
+      res.send({ success: true, data: conversation });
     });
   } catch (error) {
     console.error(error);

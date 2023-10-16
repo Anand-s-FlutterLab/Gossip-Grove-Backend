@@ -5,7 +5,6 @@ function userTracker() {
 
   function addUser(socketId, userID) {
     activeUsers.set(userID, socketId);
-    console.log(activeUsers);
   }
 
   function removeUser(socketId) {
@@ -15,22 +14,27 @@ function userTracker() {
         break; // Exit the loop once the user is removed
       }
     }
-    console.log(activeUsers);
   }
 
-  // Check if a user is active by their userID
   function isUserActive(userID) {
     return activeUsers.has(userID);
+  }
+
+  function getActiveUsers() {
+    return activeUsers;
   }
 
   return {
     addUser,
     removeUser,
     isUserActive,
+    getActiveUsers, // Include this method to return the activeUsers Map
   };
 }
 
 const userTrack = userTracker();
+const activeUsersMap = userTrack.getActiveUsers(); // You can now get the activeUsers Map
+
 
 async function socketChat({ message_data }) {
   const {
@@ -45,7 +49,6 @@ async function socketChat({ message_data }) {
     senderName,
   } = message_data;
   let isUserActive = await userTrack.isUserActive(receiverId);
-  console.log(isUserActive);
   if (isUserActive) {
     const newMessage = {
       chatId: chatId,

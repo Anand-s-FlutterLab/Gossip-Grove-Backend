@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModels");
+const socketController = require("./socketController");
 
 async function login(req, res) {
   let user = await User.findOne({ email: req.body.email });
@@ -36,6 +37,7 @@ async function signup(req, res) {
     phone: req.body.phone,
     userProfileUrl: req.body.userProfileUrl,
     notificationToken: req.body.notificationToken,
+    status: req.body.status,
   });
 
   await newUser.save();
@@ -48,11 +50,6 @@ async function signup(req, res) {
 async function getAllUsers(req, res) {
   let user = await User.find();
   return res.status(200).send({ success: true, data: user });
-}
-
-async function getUserbyId(req, res) {
-  const user = await User.findById(req.user._id);
-  res.status(200).send({ success: true, data: user });
 }
 
 async function updateUserData(req, res) {
@@ -95,6 +92,17 @@ async function addNotificationToken(req, res) {
   }
 }
 
+async function getUserOnlineStatus(req, res) {
+  try {
+    const result = await socketController.userTracker.isUserActive(
+      req.body.receiverId
+    );
+    return res.status(200).send({ success: true, data: result });
+  } catch (error) {
+    return res.status(200).send({ success: false, data: err.message });
+  }
+}
+
 async function generateHash(password) {
   const salt = await bcrypt.genSalt(Number(process.env.BCRYPT_SALT));
   return bcrypt.hash(password, salt);
@@ -105,6 +113,6 @@ module.exports = {
   signup: signup,
   getAllUsers: getAllUsers,
   updateUserData: updateUserData,
-  getUserbyId: getUserbyId,
   addNotificationToken: addNotificationToken,
+  getUserOnlineStatus: getUserOnlineStatus,
 };

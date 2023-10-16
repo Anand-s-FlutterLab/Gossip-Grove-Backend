@@ -7,10 +7,10 @@ router.get("/", userController.login);
 
 router.get("/all", userController.getAllUsers);
 
-router.get("/:id", userController.getUserbyId);
-
 router.put("/update", userController.updateUserData);
 
 router.put("/addNotificationToken", userController.addNotificationToken);
+
+router.get("/getUserOnlineStatus", userController.getUserOnlineStatus);
 
 module.exports = router;

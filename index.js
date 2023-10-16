@@ -21,13 +21,16 @@ admin.initializeApp({
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-
   socket.on("join", (userId) => {
     socketController.userTracker.addUser(socket.id, userId);
+    var users = [];
+    socketController.userTracker.getActiveUsers().forEach((socketId, userId) => {
+      users.push(userId);
+    });
+    io.emit("join", {data: users});
   });
 
-  socket.on("join_room", (chatId) => {
+  socket.on("join_room", async (chatId) => {
     socket.join(chatId);
   });
 
@@ -42,24 +45,21 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     socketController.userTracker.removeUser(socket.id);
+    var users = [];
+    socketController.userTracker.getActiveUsers().forEach((socketId, userId) => {
+      users.push(userId);
+    });
+    io.emit("join", {data: users});
   });
 });
-
-const notificationController = require("./controllers/notificationController");
 
 app.use(express.json());
 app.use(checkConnectionMiddleware.checkConnection);
-app.get("/notifications", (req, res) => {
-  notificationController.sendIndividualPushNotification({
-    title: req.body.title,
-    body: req.body.body,
-    token: req.body.receiverToken,
-  });
-});
+
 app.use("/user/all", userJWTCheck.userTokenCheck);
 app.use("/user/update", userJWTCheck.userTokenCheck);
 app.use("/user/addNotificationToken", userJWTCheck.userTokenCheck);
-app.use("/user/:id", userJWTCheck.userTokenCheck);
+app.use("/user/getUserOnlineStatus", userJWTCheck.userTokenCheck);
 app.use("/chat", userJWTCheck.userTokenCheck);
 
 app.use("/user", userRoutes);

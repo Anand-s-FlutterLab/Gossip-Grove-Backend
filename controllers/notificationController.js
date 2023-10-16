@@ -6,16 +6,9 @@ function sendIndividualPushNotification({ title, body, token }) {
       title: title,
       body: body,
     },
-    token:
-      token,
+    token: token,
   };
-  admin
-    .messaging()
-    .send(payload)
-    .then((result) => {
-      console.log(payload);
-      console.log(result);
-    });
+  admin.messaging().send(payload);
 }
 
 exports.sendIndividualPushNotification = sendIndividualPushNotification;
