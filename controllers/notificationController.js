@@ -8,7 +8,12 @@ function sendIndividualPushNotification({ title, body, token }) {
     },
     token: token,
   };
-  admin.messaging().send(payload);
+  try {
+    admin.messaging().send(payload);
+    console.log("Notification sent successfully");
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 exports.sendIndividualPushNotification = sendIndividualPushNotification;

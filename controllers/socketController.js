@@ -33,7 +33,6 @@ function userTracker() {
 }
 
 const userTrack = userTracker();
-const activeUsersMap = userTrack.getActiveUsers(); // You can now get the activeUsers Map
 
 
 async function socketChat({ message_data }) {
