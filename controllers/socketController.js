@@ -60,7 +60,7 @@ async function socketChat({ message_data }) {
     };
     return { chatId: chatId, newMessage: newMessage };
   } else {
-    notificationController.sendIndividualPushNotification({
+    await notificationController.sendIndividualPushNotification({
       title: senderName,
       body: message,
       token: receiverToken,

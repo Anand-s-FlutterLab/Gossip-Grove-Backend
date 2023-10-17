@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 
-function sendIndividualPushNotification({ title, body, token }) {
+async function sendIndividualPushNotification({ title, body, token }) {
   const payload = {
     notification: {
       title: title,
@@ -8,7 +8,7 @@ function sendIndividualPushNotification({ title, body, token }) {
     },
     token: token,
   };
-  admin
+  await admin
     .messaging()
     .send(payload)
     .then((result) => {
