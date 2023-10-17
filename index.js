@@ -10,6 +10,7 @@ const userJWTCheck = require("./middleware/userJWTCheck");
 
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const io = require("socket.io")(http);
 const socketController = require("./controllers/socketController");
@@ -64,6 +65,7 @@ app.use("/chat", userJWTCheck.userTokenCheck);
 
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
+app.use("/notifications", notificationRoutes);
 
 app.get("/serverRunningStatus", (req, res) => {
   res.status(200).send("Gossip Grove Server is Currntly Running");
