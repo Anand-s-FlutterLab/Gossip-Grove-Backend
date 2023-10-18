@@ -11,7 +11,7 @@ function userTracker() {
     for (const [userID, userSocketId] of activeUsers.entries()) {
       if (userSocketId === socketId) {
         activeUsers.delete(userID);
-        break; // Exit the loop once the user is removed
+        break;
       }
     }
   }
